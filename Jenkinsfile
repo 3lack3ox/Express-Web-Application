@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  environment {
+    MONGODB_URI = mongodb+srv://Jason:<db_password>@express.hsxg7fd.mongodb.net/?retryWrites=true&w=majority&appName=express
+  }
+
   stages {
     stage('Clone Repository') {
       steps {
@@ -10,23 +14,22 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         script {
-          dockerImage = docker.build('my-node-website')
-        }
-      }
-    }
-    stage('Run Tests') {
-      steps {
-        script {
-          // Run tests within the Docker container using the built image
-          dockerImage.run('-t --rm my-node-website npm test')
+          sh 'docker-compose build'
         }
       }
     }
     stage('Deploy') {
       steps {
         script {
-          sh 'docker stop my-node-website || true && docker rm my-node-website || true'
-          sh 'docker run -d -p 8081:3000 --name my-node-website my-node-website'
+          // Make sure Docker Compose is installed on the Jenkins agent
+          sh 'docker-compose up -d'
+        }
+      }
+    }
+    stage('Run Tests') {
+      steps {
+        script {
+          sh 'docker-compose exec web npm test'
         }
       }
     }
