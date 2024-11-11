@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    MONGODB_URI = mongodb+srv://Jason:<db_password>@express.hsxg7fd.mongodb.net/?retryWrites=true&w=majority&appName=express
+    MONGODB_URI = mongodb+srv://Jason:3lack3ox@express.hsxg7fd.mongodb.net/express
   }
 
   stages {
