@@ -22,5 +22,13 @@ pipeline {
         }
       }
     }
+    stage('Deploy') {
+      steps {
+        script {
+          sh 'docker stop my-node-website || true && docker rm my-node-website || true'
+          sh 'docker run -d -p 8080:3000 --name my-node-website my-node-website'
+        }
+      }
+    }
   }
 }
